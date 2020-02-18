@@ -1,0 +1,9 @@
+language: node_js
+node_js:
+    - "12.14.1"
+script:
+    - echo "Deploying"
+install:
+    - npm install -g firebase-tools
+after_success:
+    - firebase deploy --project my-third-website --token $FIREBASE_TOKEN
