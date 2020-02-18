@@ -1,0 +1,257 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: #80aaff;
+}
+
+.banner {
+    background-image: url(../img/kitty.jpg);
+    background-size: 70%;
+    background-repeat: no-repeat;
+    background-color: gray;
+}
+
+footer {
+    padding-top: 40px;
+    padding-left: 15%;
+    padding-right: 15%;
+}
+
+main {
+    padding-left: 15%;
+    padding-right: 15%;
+}
+
+header {
+    background-color: #333;
+}
+
+.navigation_bar nav {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.navigation_bar a {
+    text-decoration: none;
+    display: block;
+    padding: 15px 25px;
+    text-align: center;
+    background-color: #333;
+    color: white;
+    margin: 0;
+}
+
+.navigation_bar a:hover {
+    background-color: cornflowerblue;
+}
+
+.navigation_bar .active {
+    background-color: cornflowerblue;
+}
+
+h1 {
+    display: block;
+    text-align: right;
+    font-size: 2em;
+    padding-top: 40px;
+    padding-right: 5%;
+}
+
+h2 {
+    color:   #00802b
+}
+
+h3 {
+    text-align: right;
+    padding-bottom: 40px;
+    padding-right: 5%;
+}
+
+.p1 {
+    width: 100%;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+    padding-top: 40px;
+    padding-bottom: 40px;
+}
+
+.p1c1 {
+    flex-basis: 50%;        
+    background-color: #80aaff;
+    align-self: center;
+}
+
+.p1c1 p {
+    font-size: 20px;
+}
+
+.p1c2 {
+    flex-basis: 20%;
+    background-color: gray;
+    padding: 20px;
+}
+
+.p1c2 img {
+    display: block;
+    max-width: 250px;
+    height: auto;
+    margin: auto;
+} 
+
+.p2 {
+    width: 100%;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+}
+
+.p2c1 {
+    flex-basis: 20%;
+    background-color: gray;
+    padding: 20px;
+    align-items: flex-end;
+    justify-content: flex-start;
+}
+
+.p2c1 img {
+    display: block;
+    max-width: 400px;
+    height: auto;
+    margin: auto;   
+}
+
+.p2c2 {
+    text-align: right;
+    flex-basis: 50%;
+    align-self: center;
+    background-color: #80aaff;
+}
+
+.p2c2 p {
+    font-size: 20px;
+}
+
+.p2c3 {
+    padding-top: 20px;
+    padding-bottom: 20px;
+    align-self: right;
+    width: 50%;
+}
+
+pre {
+    background-color: black;
+    color: white;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-content: center;
+    max-height: 100vh;
+    padding-top: 10px;
+}
+
+.container img {
+    margin: 10px;
+    max-width: 25%;
+}
+
+.container svg {
+    margin: 10px;
+    max-width: 25%;
+}
+
+table {
+    width: 80%;
+    height: 80%;
+    margin-top: 5%;
+    margin-bottom: 5%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+table, th, td{
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
+.time {
+    background-color: #ffffb3;
+}
+
+.free {
+    background-color: white;
+}
+
+.sleep {
+    background-color: gray;
+}
+
+.school {
+    background-color: blue;
+}
+
+.studying {
+    background-color: #ffa64d;
+}
+
+#row-one {
+    background-color: #00802b;
+}
+
+#table-head {
+    padding: 10px;
+    background-color: #333;
+    color: white;
+}
+
+caption {
+    font-size: 300%;
+}
+
+.lists {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    padding-bottom: 5%;
+    font-size: 120%;
+}
+ul {
+    display: list-item;
+    list-style-type: circle;
+}
+
+ol {
+    display: list-item;
+}
+
+.ep {
+    font-family: 'Press Start 2P', cursive;
+}
+
+.load {
+    margin-top: 40px;
+}
+
+#key_dialog {
+    display: none;
+}
+
+#mouse_dialog {
+    display: none;
+}
+
+#scroll_dialog {
+    display: none;
+}
+
+#mouse_playground {
+    width: 400px;
+    height: 400px;
+    background-color: blue;
+}

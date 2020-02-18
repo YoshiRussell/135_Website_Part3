@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="author" content="Yoshi Russell">
+        <title>Home Page - Yoshi Russell</title>
+        <link rel="stylesheet" type="text/css" href="styles/main.css">
+    </head>
+    <body>
+        <script src="scripts/reporter.js"></script>
+        <section class="banner">
+            <h1>YOSHI RUSSELL</h1>
+            <h3>FORMS</h3>
+        </section>
+        <!-- Navigation Bar -->
+        <header>
+            <div class="navigation_bar">
+                <nav>
+                    <a href="index.html">HOME</a>
+                    <a href="images.html">IMAGES</a>
+                    <a class="active" href="form.html">FORM</a>
+                    <a href="table_and_lists.html">TABLE AND LISTS</a>
+                    <a href="externals.html">EXTERNALS</a>
+                    <a href="Reportertest.html">PERFORMANCE</a>
+                </nav>
+            </div>
+        </header>
+        <!-- Main Body-->
+        <div>
+            <p>
+                I would love to know the demographic of the people visiting
+                 my website. If you don't mind telling me a bit about yourself 
+                 in the survey below that would be great. Thank you.
+            </p>
+        </div>
+        <fieldset>
+            <form class="survey" action="http://httpbin.org/post" oninput="x.value=parseInt(a.value)+'%'" autocomplete="on" method="post">
+                <fieldset>
+                    <legend>Various questions</legend>
+                    First name:<br>
+                    <input type="text" name="firstname" maxlength="15" autofocus required><br>
+                    Last name:<br>
+                    <input tabindex="0" type="text" name="lastname" maxlength="15" required><br>
+                    Email:<br>
+                    <input type="email" name="email" required><br>
+                    Phone number:<br>
+                    <input type="tel" name="phone-number" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" required><br>
+                    Favorite color:<br>
+                    <input type="color" name="fav-color"><br>
+                    Birthday:<br>
+                    <input type="date" id="b-day" name="b-day" min="1900-01-01" max='2000-01-01' required><br>
+                    Age:<br>
+                    <input type="number" name="age" required><br>
+                </fieldset>
+                <fieldset>
+                    <legend>Gender of visitor</legend>
+                    <label for="male">Male</label>
+                    <input type="radio" name="gender" id="male" value="male" checked><br>
+                    <label for="female">Female</label>
+                    <input type="radio" name="gender" id="female" value="female"><br>
+                    <label for="Non-binary">Non-Binary</label>
+                    <input type="radio" name="gender" id="Non-binary" value="Non-binary"><br>
+                </fieldset>
+                <fieldset>
+                    <label for="about_yourself">Tell me a little about yourself:</label>
+                    <br>
+                    <textarea id="about_yourself" name="about_yourself" rows="10" cols="50"></textarea>
+                </fieldset>
+                <fieldset>
+                    <br>
+                    <legend>Half way there!</legend>
+                    <label>Progress Meter: </label>
+                    <progress value="50" max="100"></progress>
+                    <br>
+                </fieldset>
+                <fieldset>
+                    <legend>Select all that apply<br><br>I am a ...</legend>
+                    <input type="checkbox" name="occupation-1" value="student">Student<br>
+                    <input type="checkbox" name="occupation-2" value="pt-work">Part-time worker<br>
+                    <input type="checkbox" name="occupation-3" value="ft-work">Full-time worker<br>
+                    <input type="checkbox" name="occupation-4" value="stay-at-home">Stay-at-home parent<br>
+                    <input type="checkbox" name="occupation-5" value="break">Taking a break<br>
+                </fieldset>
+                <fieldset>
+                    <legend>If you are a college student, what is your major?</legend>
+                    <select>
+                        <optgroup label="Medical & Life Sciences">
+                            <option value="athletic training">Athletic Training</option>
+                            <option value="biology">Biology</option>
+                            <option value="chemistry">Chemistry</option>
+                            <option value="Environmental Science">Environmental Science</option>
+                            <option value="Pre-Medical">Pre-Medical</option>
+                            <option value="other">Medical & Life Sciences - other</option>
+                        </optgroup>
+                        <optgroup label="Liberal Arts">
+                            <option value="Arts Management">Arts Management</option>
+                            <option value="Education">Education</option>
+                            <option value="English/Writing">English/Writing</option>
+                            <option value="History">History</option>
+                            <option value="Philosophy">Philosophy</option>
+                            <option value="Journalism">Journalism</option>
+                            <option value="other">Liberal Arts - other</option>
+                        </optgroup>
+                        <optgroup label="Engineering & Technology">
+                            <option value="Aerospace Engineering">Aerospace Engineering</option>
+                            <option value="Astronomy/Physics">Astronomy/Physics</option>
+                            <option value="Biomedical Engineering">Biomedical Engineering</option>
+                            <option value="Chemical Engineering">Chemical Engineering</option>
+                            <option value="Civil Engineering">Civil Engineering</option>
+                            <option value="Electrical Engineering">Electrical Engineering</option>
+                            <option value="Computer Science">Computer Science</option>
+                            <option value="Computer Engineering">Computer Engineering</option>
+                            <option value="other">Engineering & Technology - other</option>
+                        </optgroup>
+                    </select>
+                </fieldset>
+                <fieldset>
+                    <legend>Random question. Do you like anime?</legend>
+                    <input list="your_opinion" name="like-anime?">
+                    <datalist id="your_opinion">
+                        <option value="Yes!"></option>
+                        <option value="Nahh"></option>
+                        <option value="Never gave it a chance"></option>
+                    </datalist>
+                </fieldset>
+                <fieldset>
+                    <legend>Rate my website</legend>
+                    <input type="range" id="a" name="rate" min="0" max="100">
+                    <output name="x" for="a"></output>
+                </fieldset>
+                <fieldset>
+                    <legend title="link to your website if you have one">Link to your website</legend
+                        >
+                    <input type="url" name="user-website">
+                </fieldset>
+                <fieldset>
+                    <legend>If you want to share your Resume and/or Cover letter</legend>
+                    <input type="file" name="resume" accept=".doc,.docx,.pdf" multiple>
+                </fieldset>
+                <fieldset>
+                    <legend>Search the page</legend>
+                    <input type="search" placeholder="search" name="q">
+                    <button>Search</button>
+                </fieldset>
+                <fieldset>
+                    <legend>Opinion on my website?</legend>
+                    <button disabled>I hate your website</button>
+                    <label>Do you love my website?</label>
+                    <input type="text" name="love" value="Yes I love it" readonly>
+                </fieldset>
+                <fieldset>
+                    <legend>Enter a password just cause</legend>
+                    <input type="password" name="password" minlength="8">
+                </fieldset>
+                <fieldset>
+                    <legend>Submit</legend>
+                    Time and Date of submission <br>
+                    (hour:minute am/pm):
+                    <input type="time" name="current-time"><br>
+                    (week):
+                    <input type="week" name="current-week"><br>
+                    (month):
+                    <input type="month" name="current-month"><br>
+                    Done!<br>
+                    <meter min="0" max="100" value="100"></meter>
+                    <input type="hidden" id="custId" name="custId" value="1234">
+                    <input type="submit" value="Submit">
+                    <input type="reset" value="Reset">
+                </fieldset>
+            </form>
+        </fieldset>
+    </body>
+</html>

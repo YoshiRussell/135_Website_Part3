@@ -1,0 +1,1 @@
+alert("Hello visitor!! Welcome to the externals page WOOO!");

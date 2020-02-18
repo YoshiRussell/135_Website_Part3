@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="author" content="Yoshi Russell">
+        <title>Home Page - Yoshi Russell</title>
+        <link rel="stylesheet" type="text/css" href="styles/main.css">
+    </head>
+    <body>
+        <script src="scripts/reporter.js"></script>
+        <section class="banner">
+            <h1>YOSHI RUSSELL</h1>
+            <h3>My Portfolio</h3>
+        </section>
+        <!-- Navigation Bar -->
+        <header>
+            <div class="navigation_bar">
+                <nav>
+                    <a class="active" href="index.html">HOME</a>
+                    <a href="images.html">IMAGES</a>
+                    <a href="form.html">FORM</a>
+                    <a href="table_and_lists.html">TABLE AND LISTS</a>
+                    <a href="externals.html">EXTERNALS</a>
+                    <a href="Reportertest.html">PERFORMANCE</a>
+                </nav>
+            </div>
+        </header>
+        <!-- Main Body-->
+        <main>
+            <section class="p1">
+                
+                <div class="p1c1">
+                    <h2>ABOUT ME</h2>
+                    <p>
+                        Hello! My name is Yoshiichiro, but everyone I know calls me Yoshi. I am 
+                        currently a Junior at UCSD pursuing my bachelors degree in Computer Science. I want to someday
+                         be the greatest software engineer that has ever lived. This is 
+                        my first time ever creating a website so please don't judge the looks and functionality 
+                        of it <i>too</i> much. 
+                    </p>
+                </div>
+                <div class="p1c2">
+                    <img src="img/F3CA44A2-19FB-4B56-9290-A90BCD75AF68.JPG" alt="me">
+                </div>
+            
+            </section>
+            <section class="p2">
+                <div class="p2c1">
+                    <img src="img/drift.jpg" alt="drift">
+                </div>
+
+                <div class="p2c2">
+                    <h2>HOBBIES AND INTERESTS</h2>
+                    <p>
+                        I enjoy playing video games and skateboarding. 
+                        My main interests include fashion, anime, art, and the Japanese car scene. 
+                        I also <em>love</em> coffee and <code>coding()</code> (:
+                    </p>
+                </div>
+            </section>
+            <div class="p2c3">
+                <details>
+                    <summary>Click me for a surprise</summary>
+                    <pre > 
+                           ⢀⡴⠑⡄⠀⠀⠀⠀⠀⠀⠀⣀⣀⣤⣤⣤⣀⡀⠀⠀⠀⠀ ⠸⡇⠀
+                              ⠿⡀⠀⠀⠀⣀⡴⢿⣿⣿⣿⣿⣿⣿⣿⣷⣦⡀⠀⠀⠀ ⠀⠀⠀⠀
+                               ⠑⢄⣠⠾⠁⣀⣄⡈⠙⣿⣿⣿⣿⣿⣿⣿⣿⣆⠀⠀ ⠀⠀⠀⠀
+                               ⢀⡀⠁⠀⠀⠈⠙⠛⠂⠈⣿⣿⣿⣿⣿⠿⡿⢿⣆⠀ ⠀⠀⠀
+                              ⢀⡾⣁⣀⠀⠴⠂⠙⣗⡀⠀⢻⣿⣿⠭⢤⣴⣦⣤⣹⠀ ⠀⠀
+                             ⢀⣾⣿⣿⣿⣷⣮⣽⣾⣿⣥⣴⣿⣿⡿⢂⠔⢚⡿⢿⣿⣦ ⠀
+                            ⢀⡞⠁⠙⠻⠿⠟⠉⠀⠛⢹⣿⣿⣿⣿⣿⣌⢤⣼⣿⣾⣿⡟ ⠀
+                            ⣾⣷⣶⠇⠀⠀⣤⣄⣀⡀⠈⠻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇ ⠀
+                            ⠉⠈⠉⠀⠀⢦⡈⢻⣿⣿⣿⣶⣶⣶⣶⣤⣽⡹⣿⣿⣿⣿⡇ ⠀⠀⠀⠀⠀⠀⠀
+                                   ⠉⠲⣽⡻⢿⣿⣿⣿⣿⣿⣿⣷⣜⣿⣿⣿⡇ ⠀⠀⠀⠀⠀⠀⠀⠀
+                                    ⢸⣿⣿⣷⣶⣮⣭⣽⣿⣿⣿⣿⣿⣿⣿⠀ ⠀⠀⠀⠀⠀⠀
+                                ⣀⣀⣈⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠇⠀ ⠀⠀⠀⠀⠀⠀
+                                ⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠃⠀⠀ ⠀⠀⠀⠀⠀⠀⠀
+                                 ⠹⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠀</pre>
+                </details>
+            </div>
+            <div>
+                <form oninput="result.value=parseInt(a.value)+parseInt(b.value)">
+                    <input type="number" id="a" value="1"> +
+                    <input type="number" id="b" value="1"> =
+                    <output name="result" for="a b"></output>
+                </form>
+            </div>
+        </main>
+        <footer>
+            <address>
+                Posted by: Yoshi Russell<br>
+                Contact information: <a href="yrussell@ucsd.edu">yrussell@ucsd.edu</a>
+            </address>
+            <script src="scripts/main.js"></script>
+        </footer>
+    </body>
+</html>
