@@ -1,204 +1,117 @@
-function loadHandler() {
-    resetTimer();
-    performanceItems.push("Static Information");
-    getStaticData();
-    performanceItems.push("Performance Information")
-    print_PerformanceEntries();
-    performanceItems.push("Dynamic Information");
-    dynamicKey();
-    dynamicClick();
-    dynamicMouse();
-    dynamicScroll();
-}
+var idleObj = setTimeout(timeoutHandler, 2000); 
+var currentlyIdling = false;
+var idleStart, idleEnd, idleTime;
+var uniqueKey, fromPage;
+var storeToCloud = setTimeout(gatherData, 10000);
+function gatherData(){
+    
+    var mainPerformanceObject = performance.getEntriesByName("load-time")[0];
 
-var performanceItems = []
-var eventExec = false;
-var idleTime;
-var timer = 0;
-
-function getStaticData() {
+    var miscPerfomanceObject = 
+    performance.getEntries().find( 
+        () => PerformanceNavigationTiming 
+        );
     
-    // userAgent
-    var ua = "User-agent: " + navigator.userAgent;
-    performanceItems.push(ua);
-
-    // language
-    var ul = "User-language: " + navigator.language;
-    performanceItems.push(ul);
-
-    // cookies enabled
-    var cookies = "Cookies on: " + navigator.cookieEnabled;
-    performanceItems.push(cookies);
-
-    // javascript enabled
-    var jsOn = "JavaScript: enabled";
-    performanceItems.push(jsOn);
-    
-    // images enabled
-    var img = new Image();
-    img.src="/../img/drift.jpg";
-    var imgOn = "Images On: ";
-    img.onload = function() {
-        console.log("image loaded");
-        imgOn += true;
-    }
-    img.onerror = function() {
-        console.log("image not loaded");
-        imgOn += false;
-    }
-    performanceItems.push(imgOn);
-    
-    // css enabled
-    var cssOn = "CSS enabled: " + !document.styleSheets[0].disabled;
-    performanceItems.push(cssOn);
-    
-    // available screen size
-    var availScreen = "Available Screen Dimensions (h x w): " 
-        + screen.availHeight + " x " + screen.availWidth;
-    performanceItems.push(availScreen);
-    
-    // current window size
-    var windowSize = "Window Size (h x w): " 
-        + window.innerHeight + " x " + window.innerWidth;
-    performanceItems.push(windowSize);
-    
-    // connection type
-    var effectiveConn = "Effective Connection Type: "
-        + navigator.connection.effectiveType;
-    performanceItems.push(effectiveConn);
-}
-
-function print_PerformanceEntries() {
-    
-    var p = performance.getEntries();
-    for(var i = 0; i < p.length; i++) {
-        print_PerformanceEntry(p[i]);
-    }
-}
-
-function print_PerformanceEntry(perfEntry) {
-    
-    var properties = ["name", "entryType", "startTime", "endTime", "duration"];
-    for(var i = 0; i < properties.length; i++) {
-        var supported = properties[i] in perfEntry;
-        if(supported) {
-            if(i == 0) {
-                var value = '<b>' + perfEntry[properties[i]] + '</b>';
-            } else {
-                var value = perfEntry[properties[i]];
-            }
-            if(i >= 2 && i <= 4) {
-                value += "ms";
-            }
-            performanceItems.push(properties[i] + ": " + value);
-        } else {
-            if(properties[i] == "endTime") {
-                var end_time = parseFloat(perfEntry["startTime"]) + parseFloat(perfEntry["duration"]);
-                performanceItems.push(properties[i] + ": " + end_time + "ms");
-            } else {
-                console.log("... " + properties[i] + " is NOT supported");
-            }
+    var newJSON = {
+            id : uniqueKey,
+            user_agent:  navigator.userAgent,
+            user_lang: navigator.language,
+            user_cookies: navigator.cookieEnabled,
+            user_js: true,
+            user_img: false,
+            user_css: false,
+            user_max_width: screen.width,
+            user_max_height: screen.height,
+            user_window_width: screen.availWidth,
+            user_window_height: screen.availHeight,
+            user_ect: navigator.connection.effectiveType,
+            performance_load_start: mainPerformanceObject.startTime.toFixed(3),
+            performance_load_end: (mainPerformanceObject.startTime + mainPerformanceObject.duration).toFixed(3),
+            performance_load_delta:  mainPerformanceObject.duration.toFixed(3),
+            performance_request_start: miscPerfomanceObject.requestStart.toFixed(3),
+            performance_response_start:  miscPerfomanceObject.responseStart.toFixed(3),
+            performance_response_end:  miscPerfomanceObject.responseEnd.toFixed(3),
+            performance_transfer_size: miscPerfomanceObject.transferSize,
+            performance_encoded_body_size:    miscPerfomanceObject.encodedBodySize,
+            dynamic_clicks:  JSON.stringify(mouseClicks),
+            dynamic_moves:  JSON.stringify(mouseMoves),
+            dynamic_keys:  JSON.stringify(keysPressed),
+            dynamic_scroll:  JSON.stringify(scrollEvents),
+            dynamic_idle:  JSON.stringify(idleEvents)
+    };
+    var xhttp = new XMLHttpRequest();
+    //xhttp.open("POST", "https://us-central1-my-third-website.cloudfunctions.net/webApi/api/v1/session", true);
+    //xhttp.send(newJSON);
+    xhttp.open("GET", "https://us-central1-my-third-website.cloudfunctions.net/webApi/api/v1/cookie", true);
+    xhttp.withCredentials = true;
+    xhttp.onreadystatechange = function() {
+        if(xhttp.readyState === XMLHttpRequest.DONE && xhttp.status === 200) {
+            console.log(xhttp.responseText);
         }
-    }
+    };
+    xhttp.send();
+
 }
 
-function dynamicKey() {
-    window.addEventListener("keydown" , function(event) {
-        var attributes = ["key", "keyCode", "shiftKey", "ctrlKey", "altKey"]
-        var key_str = "KEY EVENT LOG<br>";
-        performanceItems.push(key_str);
-        var key_body = "";
-        for(var i = 0; i < attributes.length; i++) {
-            key_body += attributes[i] + " = " + event[attributes[i]] + "<br>";
-        }
-        performanceItems.push(key_body);
-        resetTimer();
-    });
-}
+// There should be small 1x1 gif at the bottom of every page called check-image
+// function checkImages(){
+//     return document.getElementById('check-image').complete; // this depends on the image being in the html page
+// }
 
-function dynamicClick() {
-    window.addEventListener("click", function(event) {
-        var attributes = ["target", "clientX", "clientY", "screenX", "screenY"];
-        var click_str = "CLICK EVENT LOG<br>";
-        performanceItems.push(click_str);
-        var click_body = "";
-        for(var i = 0; i < attributes.length; i++) {
-            click_body += attributes[i] + " = " + event[attributes[i]] + "<br>";
-        }
-        performanceItems.push(click_body);
-        resetTimer();
-    }, false);
-}
+performance.mark("pre-load");
+window.addEventListener('DOMContentLoaded', beginGatherData);
 
-function mouseEvents(event) {
-
-    var attributes = ["clientX", "clientY", "screenX", "screenY", "offsetX", "offsetY"];
-    var mouse_str = "MOUSE EVENT LOG<br>";
-    performanceItems.push(mouse_str);
-    var mouse_body = "";
-    for(var i = 0; i < attributes.length; i++) {
-        mouse_body += attributes[i] + " = " + event[attributes[i]] + "<br>";
-    }
-    performanceItems.push(mouse_body);
-    resetTimer();
-}
-
-function dynamicMouse() {
-    window.addEventListener("mouseover", mouseEvents);
-    window.addEventListener("mousemove", mouseEvents);
-}
-
-function dynamicScroll() {
-    
-    window.addEventListener("scroll", function(event) {
-        var attributes = ["scrollY", "scrollX", "scrollSpeed"];
-        var scroll_str = "SCROLL EVENT LOG<br>";
-        var scroll_body = "";
-        performanceItems.push(scroll_str);
-        for(var i = 0; i < attributes.length; i++) {
-            scroll_body += attributes[i] + " = " + this[attributes[i]] + "<br>"; 
-        }
-        performanceItems.push(scroll_body);
-        resetTimer();
-    });
-}
-
-function unloading() {
-    if(timer > 0) {
-        var idle_str = "IDLE EVENT LOG<br>";
-        performanceItems.push(idle_str);
-        var idle_body = timer + " seconds";
-        performanceItems.push(idle_body);
-    }
-    var page_pth = window.location.pathname;
-    // line below was taken from stackoverflow to shorten page name
-    var page = page_pth.split("/").pop();
-    var date = new Date();
-    var key;
-    if(page.length > 0) {
-        key = page + " - " + date;
+function beginGatherData(){
+    performance.mark("post-load");
+    performance.measure("load-time", "pre-load", "post-load");
+    var path = window.location.pathname;
+    fromPage = path.split("/").pop();
+    if(fromPage.length > 0){
+        uniqueKey = fromPage + ' - ' + (new Date());
     } else {
-        key = "index.html" + " - " + date;
+        uniqueKey = 'index.html' + ' - ' + (new Date());
     }
-    window.localStorage.setItem(key, JSON.stringify(performanceItems));
+    addListeners();
+}
+let mouseClicks = [];
+let mouseMoves = [];
+let keysPressed = [];
+let scrollEvents = [];
+let idleEvents = [];
+function addListeners(){
+    window.addEventListener("click", e => resetIdle() | mouseClicks.push([e.clientX, e.clientY]) );
+    window.addEventListener("mousemove", e =>  resetIdle() | mouseMoves.push([e.clientX, e.clientY]) );
+    window.addEventListener("keyup", e => resetIdle() | keysPressed.push(e.key) );
+    window.addEventListener("scroll", e => resetIdle() | scrollEvents.push([window.scrollX, window.scrollY]) );
+    window.addEventListener("beforeunload", e => resetIdle() | storeData());
 }
 
-function resetTimer() {
-    clearTimeout(idleTime);
-    if(timer > 0) {
-        var idle_str = "IDLE EVENT LOG<br>";
-        performanceItems.push(idle_str);
-        var idle_body = timer + " seconds<br>";
-        performanceItems.push(idle_body);
-        timer = 0;
+
+function resetIdle(){
+    clearTimeout(idleObj);
+    idleObj = setTimeout(timeoutHandler, 2000); 
+
+    if(currentlyIdling){
+        idleEnd = new Date().getTime();
+        idleTime = idleEnd - idleStart;
+        idleEvents.push([idleTime]);
     }
-    idleTime = setTimeout(startTimer, 2000);
+    currentlyIdling = false;
+}
+function timeoutHandler(){
+    currentlyIdling = true;
+    idleStart = new Date().getTime();
 }
 
-function startTimer() {
-    timer += 1;
-    idleTime = setTimeout(startTimer, 1000);
+function logClick(e){
+    mouseClicks.push([e.clientX, e.clientY]);
+}
+function logMove(e){
+    mouseMoves.push([e.clientX, e.clientY]);
+}
+function storeData(e){
+    gatherData();
 }
 
-window.addEventListener('DOMContentLoaded', loadHandler);
-window.addEventListener('beforeunload', unloading);
+
+
