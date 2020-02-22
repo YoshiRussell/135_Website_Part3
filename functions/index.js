@@ -132,7 +132,7 @@ app.get('/cookie', (request, response) => {
     // if persistent cookie is not found add cookie and firestore doc
     try {
         if(!permCookie) {
-            const newUserRef = firestore.collection('users').doc();
+            const newUserRef = firestore.collection('users').add({exists: true});
             response.cookie("user_cookie", newUserRef.id, {maxAge: 600000000});
         }
     } catch (error) {
