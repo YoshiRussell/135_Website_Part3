@@ -42,14 +42,17 @@ function gatherData(){
     var xhttp = new XMLHttpRequest();
     //xhttp.open("POST", "https://us-central1-my-third-website.cloudfunctions.net/webApi/api/v1/session", true);
     //xhttp.send(newJSON);
-    xhttp.open("GET", "https://us-central1-my-third-website.cloudfunctions.net/webApi/cookie", true);
+    //xhttp.open("GET", "https://us-central1-my-third-website.cloudfunctions.net/webApi/cookie", true);
+    xhttp.open("POST", "https://us-central1-my-third-website.cloudfunctions.net/webApi/session");
     xhttp.withCredentials = true;
     xhttp.onreadystatechange = function() {
         if(xhttp.readyState === XMLHttpRequest.DONE && xhttp.status === 200) {
             console.log(xhttp.responseText);
         }
     };
+    xhttp.setRequestHeader("credentials", "include");
     xhttp.send();
+    xhttp.send(newJSON);
 
 }
 
