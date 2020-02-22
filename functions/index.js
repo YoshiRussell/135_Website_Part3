@@ -139,16 +139,13 @@ app.get('/cookie', (request, response) => {
                 .then(sessionDocRef => {
                     response.cookie("user_cookie", userDocRef.id, {maxAge: 60000000, httpOnly: true});
                     response.cookie("session_cookie", sessionDocRef.id);
+                    response.setHeader("testing", "test");
                     let bodystring = "userRef: " + userDocRef.id + ", sessionRef: " + sessionDocRef.id;
                     return response.send(bodystring);
+                }).catch(error => {
+                    return response.send("ERROR HERE WHAAT");
                 });
             });
-            // const userRef = firestore.collection('users').add({user: "helloooo"});
-            // const sessionRef = userRef.collection('sessions').add({made: userRef.id});
-            // response.cookie('user_cookie', userRef.id, {maxAge: 600000});
-            // response.cookie('session_cookie', sessionRef.id);
-            // response.setHeader('testing', '123');
-            // responseBody += "testing testing";
         } catch (error) {
             response.status(500).send("error in permCookie make");
         }
