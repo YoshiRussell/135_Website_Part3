@@ -2,10 +2,9 @@ const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 const express = require('express');
 const bodyParser = require('body-parser');
-const cookieParser = requires('cookie-parser');
+const cookieParser = require('cookie-parser');
 const cors = require('cors')({origin: true});
 const app = express();
-const main = express();
 
 // Initialize Cloud Firestore through Firebase
 const firebaseConfig = {
@@ -25,11 +24,10 @@ var firestore = admin.firestore();
 console.log("admin-firestore initialized");
 
 // add path used for receiving requests
-main.use('/api/v1', app);
-main.use(cors);
-main.use(bodyParser.json());
-main.use(cookieParser());
-exports.webApi = functions.https.onRequest(main);
+app.use(cors);
+app.use(bodyParser.json());
+app.use(cookieParser());
+exports.webApi = functions.https.onRequest(app);
 
 // post tracker data in corresponding session
 // path that triggers this 
@@ -140,17 +138,19 @@ app.post('/session', async (request, response) => {
 app.get('/cookie', async (request, response) => {
     
     try {
-        response.setHeader('Cache-Control')
-        response.set("Access-Control-Allow-Origin", "http://127.0.0.1:5501/");
+        // response.setHeader('Cache-Control')
+        // response.set("Access-Control-Allow-Origin", "*");
         response.set("Access-Control-Allow-Methods", "GET");
         response.set("Access-Control-Allow-Headers", "Content-Type");
         response.set("Access-Control-Allow-Credentials", true);
         response.set("Access-Control-Max-Age", "3600");
+        response.set("SameSite")
         //const permCookie = request.cookies["permCookie"];
         //const seshCookie = request.cookies["seshCookie"];
         //const __session = request.cookies["__session"];
-        response.cookie('__session', "124");
-        response.send({__s: __session});
+        //response.cookie('__session', "124");
+        response.cookie('farting', 'fortnite', { sameSite: 'none', secure: true});
+        response.send("hello");
     } catch (error) {
         response.status(500).send(error);
     }
