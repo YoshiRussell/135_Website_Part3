@@ -132,16 +132,12 @@ app.get('/cookie', (request, response) => {
     // if persistent cookie is not found add cookie and firestore doc
     if(!permCookieId) {
         try {
-            firestore.collection('users').add({user: true})
-            .then(userDocRef => {
-                userDocRef.collection('sessions').add({made: "inside permCookieId",
-                                                       permId: userDocRef.id})
-                .then(sessionDocRef => {
-                    response.cookie("user_cookie", userDocRef.id, {maxAge: 60000000, httpOnly: true});
-                    response.cookie("session_cookie", sessionDocRef.id);
-                    responseBody += "userDocRef.id: " + userDocRef.id + ", sessionDocRef.id: " + sessionDocRef.id;
-                });
-            });
+            const userDocRef = firestore.collection('users').add({user: true});
+            const sessionDocRef = userDocRef.collection('sessions').add({made: "inside permCookieId",
+                                                                         permId: userDocRef.id});   
+            response.cookie("user_cookie", userDocRef.id, {maxAge: 60000000, httpOnly: true});
+            response.cookie("session_cookie", sessionDocRef.id);
+            responseBody += "userDocRef.id: " + userDocRef.id + ", sessionDocRef.id: " + sessionDocRef.id;
         } catch (error) {
             response.status(500).send("error in permCookie make");
         }
@@ -159,10 +155,8 @@ app.get('/cookie', (request, response) => {
     }
     try {
         const testingDocId = 'testingDoc';
-        firestore.collection('users').doc(testingDocId).set({madeTest: "hello"})
-        .then(testingSessionRef => {
-            responseBody += "testingSessionRef: " + testingSessionRef.id;
-        });
+        firestore.collection('users').doc(testingDocId).set({madeTest2: "fortnite"}, {merge: true});
+        responseBody += "UHH";
     } catch (error) {
         response.status(500).send("error in testing");
     }
