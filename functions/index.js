@@ -92,9 +92,10 @@ app.post('/session', async (request, response) => {
 
         //const data = request.body;
         // dataArray will hold list of tracker data for a session
-        const dataArray = {
-            dataArray: [data]
-        }
+        // const dataArray = {
+        //     dataArray: [data]
+        // }
+
         // check if user has persistent cookie or session cookie
         const permCookie = request.user_cookies["user_cookie"];
         const seshCookie = request.user_cookies["session_cookie"];
@@ -149,9 +150,22 @@ app.get('/cookie', async (request, response) => {
         //const seshCookie = request.cookies["seshCookie"];
         //const __session = request.cookies["__session"];
         //response.cookie('__session', "124");
-        response.cookie('session_cookie', 'shart');
-        response.cookie('user_cookie', 'fortnite', { sameSite: 'none', secure: true, httpOnly: true});
-        response.send("hello");
+        // check if user has persistent cookie or session cookie
+        const permCookie = request.user_cookies["user_cookie"];
+        const seshCookie = request.user_cookies["session_cookie"];
+        // if persistent cookie is not found add cookie and firestore doc
+        if(!permCookie) {
+            const newUserRef = firestore.collection('users').doc();
+            response.cookie("user_cookie", newUserRef.id, {maxAge: 600000000});
+        }
+        // if session cookie is not found add cookie and firestore doc
+        if(!seshCookie) {
+            newSessionRef = firestore.collection('users')
+                .doc(newUserRef.id)
+                .collection('sessions')
+                .doc();
+            response.cookie("session_cookie", newSessionRef.id);
+        }
     } catch (error) {
         response.status(500).send(error);
     }
