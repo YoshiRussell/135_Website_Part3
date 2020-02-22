@@ -116,25 +116,30 @@ app.post('/session', async (request, response) => {
 // check if user has persistent/session cookie
 // append to existing session doc
 // or create new cookies and corresponding docs
-app.get('/cookie', async (request, response) => {
-    try {
-        // Bypass CORS
-        response.set('Cache-Control', 'private')
-        response.set("Access-Control-Allow-Origin", "*");
-        response.set("Access-Control-Allow-Methods", "GET");
-        response.set("Access-Control-Allow-Headers", "Content-Type");
-        response.set("Access-Control-Allow-Credentials", true);
-        response.set("Access-Control-Max-Age", "600000");
+app.get('/cookie', (request, response) => {
+    // Bypass CORS
+    response.set('Cache-Control', 'private')
+    response.set("Access-Control-Allow-Origin", "*");
+    response.set("Access-Control-Allow-Methods", "GET");
+    response.set("Access-Control-Allow-Headers", "Content-Type");
+    response.set("Access-Control-Allow-Credentials", true);
+    response.set("Access-Control-Max-Age", "600000");
         
-        // check if user has persistent cookie or session cookie
-        const permCookie = request.cookies["user_cookie"];
-        const seshCookie = request.cookies["session_cookie"];
+    // check if user has persistent cookie or session cookie
+    const permCookie = request.cookies["user_cookie"];
+    const seshCookie = request.cookies["session_cookie"];
 
-        // if persistent cookie is not found add cookie and firestore doc
+    // if persistent cookie is not found add cookie and firestore doc
+    try {
         if(!permCookie) {
             const newUserRef = firestore.collection('users').doc();
             response.cookie("user_cookie", newUserRef.id, {maxAge: 600000000});
         }
+    } catch (error) {
+        response.status(500).send("failed usercookie");
+    }
+
+    try {
         // if session cookie is not found add cookie and firestore doc
         if(!seshCookie) {
             const newSessionRef = firestore.collection('users')
@@ -143,10 +148,12 @@ app.get('/cookie', async (request, response) => {
                 .add({test: "inside session"});
             response.cookie("session_cookie", newSessionRef.id);
         }
-        response.send("ok");
     } catch (error) {
-        response.status(500).send(error);
+        response.status(500).send("failed sessioncookie");
     }
+
+    response.send("cookies set");
+    
     //     if(!__session) {
     //         response.cookie('__session', '123');
     //         response.send({sesh: __session});
