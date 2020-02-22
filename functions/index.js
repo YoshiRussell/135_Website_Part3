@@ -126,34 +126,34 @@ app.get('/cookie', (request, response) => {
     response.set("Access-Control-Max-Age", "600000");
         
     // check if user has persistent cookie or session cookie
-    const permCookie = request.cookies["user_cookie"];
-    const seshCookie = request.cookies["session_cookie"];
+    const permCookieId = request.cookies["user_cookie"];
+    const seshCookieId = request.cookies["session_cookie"];
 
     // if persistent cookie is not found add cookie and firestore doc
-    try {
-        if(!permCookie) {
-            const newUserRef = firestore.collection('users').add({exists: true});
-            response.cookie("user_cookie", newUserRef.id, {maxAge: 600000000});
+    if(!permCookieId) {
+        try {
+            firestore.collection('users').add({user: true})
+            .then(userDocRef => {
+                userDocRef.collection('sessions').add({made: "inside permCookieId"})
+                .then(sessionDocRef => {
+                    response.cookie("user_cookie", userDocRef.id, {maxAge: 60000000});
+                    response.cookie("session_cookie", sessionDocRef.id);
+                });
+            });
+        } catch (error) {
+            response.status(500).send("error in permCookie make");
         }
-    } catch (error) {
-        response.status(500).send("failed usercookie");
     }
-
-    try {
-        // if session cookie is not found add cookie and firestore doc
-        if(!seshCookie) {
-            const newSessionRef = firestore
-                .doc(newUserRef)
-                .collection('sessions')
-                .add({test: "inside session"});
-            response.cookie("session_cookie", newSessionRef.id);
+    else if(!seshCookieId) {
+        try {
+            firestore.collection('users').doc(permCookieId).add({made: "inside seshCookieId"})
+            .then(sessionDocRef => {
+                response.cookie("session_cookie", sessionDocRef.id);
+            });
+        } catch (error) {
+            response.status(500).send("error in seshCookie make");
         }
-    } catch (error) {
-        response.status(500).send(
-            {sessionId: newUserRef.id}
-        );
     }
-
     response.send("cookies set");
     
     //     if(!__session) {
