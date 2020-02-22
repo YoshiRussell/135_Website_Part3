@@ -143,13 +143,13 @@ app.get('/cookie', async (request, response) => {
         response.set("Access-Control-Allow-Methods", "GET");
         response.set("Access-Control-Allow-Headers", "Content-Type");
         response.set("Access-Control-Allow-Credentials", true);
-        response.set("Access-Control-Max-Age", "3600");
+        response.set("Access-Control-Max-Age", "600000");
         //const permCookie = request.cookies["permCookie"];
         //const seshCookie = request.cookies["seshCookie"];
         //const __session = request.cookies["__session"];
         //response.cookie('__session', "124");
         response.cookie('session_cookie', 'shart');
-        response.cookie('user_cookie', 'fortnite', { sameSite: 'none', secure: true, Path: "/"});
+        response.cookie('user_cookie', 'fortnite', { sameSite: 'none', secure: true, httpOnly: true});
         response.send("hello");
     } catch (error) {
         response.status(500).send(error);
