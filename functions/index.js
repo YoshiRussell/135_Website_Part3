@@ -148,7 +148,7 @@ app.get('/cookie', (request, response) => {
     }
     else if(!seshCookieId) {
         try {
-            firestore.collection('users').doc(permCookieId).add({made: "inside seshCookieId"})
+            firestore.collection('users').doc(permCookieId).set({made: "inside seshCookieId"})
             .then(sessionDocRef => {
                 response.cookie("session_cookie", sessionDocRef.id);
                 responseBody += "sessionDocRef.id: " + sessionDocRef.id;
@@ -159,7 +159,7 @@ app.get('/cookie', (request, response) => {
     }
     try {
         const testingDocId = 'testingDoc';
-        firestore.collection('users').doc(testingDocId).add({madeTest: "hello"})
+        firestore.collection('users').doc(testingDocId).set({madeTest: "hello"})
         .then(testingSessionRef => {
             responseBody += "testingSessionRef: " + testingSessionRef.id;
         });
