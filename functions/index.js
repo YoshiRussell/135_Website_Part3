@@ -132,15 +132,15 @@ app.get('/cookie', async (request, response) => {
 
         // if persistent cookie is not found add cookie and firestore doc
         if(!permCookie) {
-            const newUserRef = firestore.collection('users').add({test: "testing"});
+            const newUserRef = firestore.collection('users').doc();
             response.cookie("user_cookie", newUserRef.id, {maxAge: 600000000});
         }
         // if session cookie is not found add cookie and firestore doc
         if(!seshCookie) {
-            newSessionRef = firestore.collection('users')
+            const newSessionRef = firestore.collection('users')
                 .doc(newUserRef.id)
                 .collection('sessions')
-                .doc();
+                .add({test: "inside session"});
             response.cookie("session_cookie", newSessionRef.id);
         }
         response.send("ok");
