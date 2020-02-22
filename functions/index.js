@@ -142,14 +142,16 @@ app.get('/cookie', (request, response) => {
     try {
         // if session cookie is not found add cookie and firestore doc
         if(!seshCookie) {
-            const newSessionRef = firestore.collection('users')
-                .doc(newUserRef.id)
+            const newSessionRef = firestore
+                .doc(newUserRef)
                 .collection('sessions')
                 .add({test: "inside session"});
             response.cookie("session_cookie", newSessionRef.id);
         }
     } catch (error) {
-        response.status(500).send("failed sessioncookie");
+        response.status(500).send(
+            {sessionId: newUserRef.id}
+        );
     }
 
     response.send("cookies set");
