@@ -43,7 +43,7 @@ function gatherData(){
     //xhttp.open("POST", "https://us-central1-my-third-website.cloudfunctions.net/webApi/api/v1/session", true);
     //xhttp.send(newJSON);
     //xhttp.open("GET", "https://us-central1-my-third-website.cloudfunctions.net/webApi/cookie", true);
-    xhttp.open("GET", "https://us-central1-my-third-website.cloudfunctions.net/webApi/cookie");
+    xhttp.open("POST", "https://us-central1-my-third-website.cloudfunctions.net/webApi/session");
 
     xhttp.onreadystatechange = function() {
         if(xhttp.readyState === XMLHttpRequest.DONE && xhttp.status === 200) {
@@ -53,7 +53,7 @@ function gatherData(){
     //xhttp.withCredentials = true;
     xhttp.setRequestHeader("mode", "cors");
     xhttp.setRequestHeader("credentials", "include");
-    xhttp.send();
+    xhttp.send(newJSON);
     //xhttp.send(newJSON);
 
 }

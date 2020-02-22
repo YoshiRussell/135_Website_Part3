@@ -96,12 +96,12 @@ app.post('/session', async (request, response) => {
             dataArray: [data]
         }
         // check if user has persistent cookie or session cookie
-        const permCookie = request.user_cookies["permCookie"];
-        const seshCookie = request.user_cookies["seshCookie"];
+        const permCookie = request.user_cookies["user_cookie"];
+        const seshCookie = request.user_cookies["session_cookie"];
         // if persistent cookie is not found add cookie and firestore doc
         if(!permCookie) {
             const newUserRef = firestore.collection('users').doc();
-            request.cookie("permCookie", newUserRef.id, {maxAge: 600000000});
+            response.cookie("user_cookie", newUserRef.id, {maxAge: 600000000});
         }
         // if session cookie is not found add cookie and firestore doc
         if(!seshCookie) {
@@ -109,19 +109,20 @@ app.post('/session', async (request, response) => {
                 .doc(newUserRef.id)
                 .collection('sessions')
                 .add(dataArray);
-            request.cookie("seshCookie", newSessionRef.id);
+            response.cookie("session_cookie", newSessionRef.id);
         }
         // bypass CORS error
-        //response.set("Access-Control-Allow-Origin", "https://my-third-website.firebaseapp.com/");
-        //response.set("Access-Control-Allow-Methods", "GET, POST, OPTION");
-        //response.set("Access-Control-Allow-Headers", "Content-Type");   
-        //response.set("Access-Control-Allow-Credentials", true);
+        response.set("Cache-Control", 'private');
+        response.set("Access-Control-Allow-Origin", "*");
+        response.set("Access-Control-Allow-Methods", "POST");
+        response.set("Access-Control-Allow-Headers", "Content-Type");   
+        response.set("Access-Control-Allow-Credentials", true);
 
         // append new session to dataArray and to firestore
         let sessionRef = firestore.collection('users')
-            .doc(permCookie)
+            .doc(newUserRef.id)
             .collections('sessions')
-            .doc(seshCookie)
+            .doc(newSessionRef.id)
             .set({
                 dataArray: data
             }, {merge: true} ); 
