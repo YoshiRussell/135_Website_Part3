@@ -151,15 +151,15 @@ app.get('/cookie', async (request, response) => {
         //const __session = request.cookies["__session"];
         //response.cookie('__session', "124");
         // check if user has persistent cookie or session cookie
-        const permCookie = request.user_cookies["user_cookie"];
-        const seshCookie = request.user_cookies["session_cookie"];
+        const permCookie = request.cookies["user_cookie"];
+        const seshCookie = request.cookies["session_cookie"];
         // if persistent cookie is not found add cookie and firestore doc
-        if(!permCookie) {
+        if(permCookie === undefined) {
             const newUserRef = firestore.collection('users').doc();
             response.cookie("user_cookie", newUserRef.id, {maxAge: 600000000});
         }
         // if session cookie is not found add cookie and firestore doc
-        if(!seshCookie) {
+        if(seshCookie === undefined) {
             newSessionRef = firestore.collection('users')
                 .doc(newUserRef.id)
                 .collection('sessions')
