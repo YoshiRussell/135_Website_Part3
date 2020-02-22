@@ -134,7 +134,8 @@ app.get('/cookie', (request, response) => {
         try {
             firestore.collection('users').add({user: true})
             .then(userDocRef => {
-                userDocRef.collection('sessions').add({made: "inside permCookieId"})
+                userDocRef.collection('sessions').add({made: "inside permCookieId",
+                                                       permId: userDocRef.id})
                 .then(sessionDocRef => {
                     response.cookie("user_cookie", userDocRef.id, {maxAge: 60000000, httpOnly: true});
                     response.cookie("session_cookie", sessionDocRef.id);
@@ -150,10 +151,20 @@ app.get('/cookie', (request, response) => {
             firestore.collection('users').doc(permCookieId).add({made: "inside seshCookieId"})
             .then(sessionDocRef => {
                 response.cookie("session_cookie", sessionDocRef.id);
+                responseBody += "sessionDocRef.id: " + sessionDocRef.id;
             });
         } catch (error) {
             response.status(500).send("error in seshCookie make");
         }
+    }
+    try {
+        const testingDocId = 'testingDoc';
+        firestore.collection('users').doc(testingDocId).add({madeTest: "hello"})
+        .then(testingSessionRef => {
+            responseBody += "testingSessionRef: " + testingSessionRef.id;
+        });
+    } catch (error) {
+        response.status(500).send("error in testing");
     }
     response.send(responseBody);
     
