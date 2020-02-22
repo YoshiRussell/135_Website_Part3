@@ -138,7 +138,7 @@ app.post('/session', async (request, response) => {
 app.get('/cookie', async (request, response) => {
     
     try {
-        response.setHeader('Cache-Control')
+        response.set('Cache-Control', 'private')
         response.set("Access-Control-Allow-Origin", "*");
         response.set("Access-Control-Allow-Methods", "GET");
         response.set("Access-Control-Allow-Headers", "Content-Type");
