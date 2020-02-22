@@ -129,23 +129,29 @@ app.get('/cookie', (request, response) => {
     const permCookieId = request.cookies["user_cookie"];
     const seshCookieId = request.cookies["session_cookie"];
     var responseBody = "";
+    response.cookie("does it work here?", "yo");
     // if persistent cookie is not found add cookie and firestore doc
     if(!permCookieId) {
         try {
-            firestore.collection('users').add({user: true})
-            .then(userDocRef => {
-                userDocRef.collection('sessions').add({made: "inside permCookieId", 
-                                                       permId: userDocRef.id})
-                .then(sessionDocRef => {
-                    response.cookie("user_cookie", userDocRef.id, {maxAge: 60000000, httpOnly: true});
-                    response.cookie("session_cookie", sessionDocRef.id);
-                    response.setHeader("testing", "test");
-                    let bodystring = "userRef: " + userDocRef.id + ", sessionRef: " + sessionDocRef.id;
-                    return response.send(bodystring);
-                }).catch(error => {
-                    return response.send("ERROR HERE WHAAT");
-                });
-            });
+            // firestore.collection('users').add({user: true})
+            // .then(userDocRef => {
+            //     userDocRef.collection('sessions').add({made: "inside permCookieId", 
+            //                                            permId: userDocRef.id})
+            //     .then(sessionDocRef => {
+            //         response.cookie("user_cookie", userDocRef.id, {maxAge: 60000000, httpOnly: true});
+            //         response.cookie("session_cookie", sessionDocRef.id);
+            //         response.setHeader("testing", "test");
+            //         let bodystring = "userRef: " + userDocRef.id + ", sessionRef: " + sessionDocRef.id;
+            //         return response.send(bodystring);
+            //     }).catch(error => {
+            //         return response.send("ERROR HERE WHAAT");
+            //     });
+            // });
+            const userDoc = firestore.collection('users').doc();
+            userDoc.set({path: "from userDoc"});
+            const seshDoc = userDoc.collection('sessions').doc();
+            seshDoc.set({path: "from sesh"});
+            response.send({user: userDoc.id, sesh: seshDoc.id});
         } catch (error) {
             response.status(500).send("error in permCookie make");
         }
