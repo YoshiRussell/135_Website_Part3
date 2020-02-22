@@ -140,9 +140,9 @@ app.get('/cookie', async (request, response) => {
     try {
         // response.setHeader('Cache-Control')
         // response.set("Access-Control-Allow-Origin", "*");
-        response.set("Access-Control-Allow-Methods", "POST");
+        response.set("Access-Control-Allow-Methods", "GET");
         response.set("Access-Control-Allow-Headers", "Content-Type");
-        response.set("Access-Control-Allow-Credentials", 'true');
+        response.set("Access-Control-Allow-Credentials", true);
         response.set("Access-Control-Max-Age", "3600");
         //const permCookie = request.cookies["permCookie"];
         //const seshCookie = request.cookies["seshCookie"];
