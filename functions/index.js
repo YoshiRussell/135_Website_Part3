@@ -148,7 +148,8 @@ app.get('/cookie', async (request, response) => {
         //const seshCookie = request.cookies["seshCookie"];
         //const __session = request.cookies["__session"];
         //response.cookie('__session', "124");
-        response.cookie('farting', 'fortnite', { sameSite: 'none', secure: true});
+        response.cookie('session_cookie', 'shart');
+        response.cookie('user_cookie', 'fortnite', { sameSite: 'none', secure: true, Path: "/"});
         response.send("hello");
     } catch (error) {
         response.status(500).send(error);
