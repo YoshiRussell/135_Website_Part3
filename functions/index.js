@@ -123,12 +123,12 @@ app.get('/cookie', (request, response) => {
     response.set("Access-Control-Allow-Methods", "GET");
     response.set("Access-Control-Allow-Headers", "Content-Type");
     response.set("Access-Control-Allow-Credentials", true);
-    response.set("Access-Control-Max-Age", "600000");
+    //response.set("Access-Control-Max-Age", "600000");
         
     // check if user has persistent cookie or session cookie
     const permCookieId = request.cookies["user_cookie"];
     const seshCookieId = request.cookies["session_cookie"];
-
+    var responseBody = "";
     // if persistent cookie is not found add cookie and firestore doc
     if(!permCookieId) {
         try {
@@ -136,8 +136,9 @@ app.get('/cookie', (request, response) => {
             .then(userDocRef => {
                 userDocRef.collection('sessions').add({made: "inside permCookieId"})
                 .then(sessionDocRef => {
-                    response.cookie("user_cookie", userDocRef.id, {maxAge: 60000000});
+                    response.cookie("user_cookie", userDocRef.id, {maxAge: 60000000, httpOnly: true});
                     response.cookie("session_cookie", sessionDocRef.id);
+                    responseBody += "userDocRef.id: " + userDocRef.id + ", sessionDocRef.id: " + sessionDocRef.id;
                 });
             });
         } catch (error) {
@@ -154,7 +155,7 @@ app.get('/cookie', (request, response) => {
             response.status(500).send("error in seshCookie make");
         }
     }
-    response.send("cookies set");
+    response.send(responseBody);
     
     //     if(!__session) {
     //         response.cookie('__session', '123');
