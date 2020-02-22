@@ -138,8 +138,8 @@ app.post('/session', async (request, response) => {
 app.get('/cookie', async (request, response) => {
     
     try {
-        // response.setHeader('Cache-Control')
-        // response.set("Access-Control-Allow-Origin", "*");
+        response.setHeader('Cache-Control')
+        response.set("Access-Control-Allow-Origin", "*");
         response.set("Access-Control-Allow-Methods", "GET");
         response.set("Access-Control-Allow-Headers", "Content-Type");
         response.set("Access-Control-Allow-Credentials", true);
@@ -187,3 +187,4 @@ app.get('/cookie', async (request, response) => {
     //     response.status(500).send(error);
     // }
 });
+
