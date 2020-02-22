@@ -33,62 +33,34 @@ exports.webApi = functions.https.onRequest(app);
 // path that triggers this 
 //   = https://us-central1-(...).cloudfunctions.net/webApi/api/v1/session
 app.post('/session', async (request, response) => {
-        try {
-            const {
-                id, 
-                user_agent,
-                user_lang,
-                user_cookies,
-                user_js,
-                user_img,
-                user_css,
-                user_max_width,
-                user_max_height,
-                user_window_width,
-                user_window_height,
-                user_ect,
-                performance_load_start,
-                performance_load_end,
-                performance_load_delta,
-                performance_request_start,
-                performance_response_start,
-                performance_response_end,
-                performance_transfer_size,
-                performance_encoded_body_size,
-                dynamic_clicks, 
-                dynamic_moves,
-                dynamic_keys,
-                dynamic_scroll,  
-                dynamic_idle
-            } = request.body;   // populate fields with request body data
-            
-            const data = {
-                id, 
-                user_agent,
-                user_lang,
-                user_cookies,
-                user_js,
-                user_img,
-                user_css,
-                user_max_width,
-                user_max_height,
-                user_window_width,
-                user_window_height,
-                user_ect,
-                performance_load_start,
-                performance_load_end,
-                performance_load_delta,
-                performance_request_start,
-                performance_response_start,
-                performance_response_end,
-                performance_transfer_size,
-                performance_encoded_body_size,
-                dynamic_clicks, 
-                dynamic_moves,
-                dynamic_keys,
-                dynamic_scroll,  
-                dynamic_idle
-            }
+    try {
+        const data = {
+            id: request.body.id, 
+            user_agent: request.body.user_agent,
+            user_lang: request.body.user_lang,
+            user_cookies: request.body.user_cookies,
+            user_js: request.body.user_js,
+            user_img: request.body.user_img,
+            user_css: request.body.user_css,
+            user_max_width: request.body.user_max_width,
+            user_max_height: request.body.user_max_height,
+            user_window_width: request.body.user_window_width,
+            user_window_height: request.body.user_window_height,
+            user_ect: request.body.user_ect,
+            performance_load_start: request.body.performance_load_start,
+            performance_load_end: request.body.performance_load_end,
+            performance_load_delta: request.body.performance_load_delta,
+            performance_request_start: request.body.performance_request_start,
+            performance_response_start: request.body.performance_response_start,
+            performance_response_end: request.body.performance_response_end,
+            performance_transfer_size: request.body.performance_transfer_size,
+            performance_encoded_body_size: request.body.performance_encoded_body_size,
+            dynamic_clicks: request.body.dynamic_clicks, 
+            dynamic_moves: request.body.dynamic_moves,
+            dynamic_keys: request.body.dynamic_keys,
+            dynamic_scroll: request.body.dynamic_scroll,  
+            dynamic_idle: request.body.dynamic_idle
+        }
 
         //const data = request.body;
         // dataArray will hold list of tracker data for a session
@@ -100,66 +72,71 @@ app.post('/session', async (request, response) => {
         const permCookie = request.cookies["user_cookie"];
         const seshCookie = request.cookies["session_cookie"];
         // if persistent cookie is not found add cookie and firestore doc
-        if(permCookie === undefined) {
-            const newUserRef = firestore.collection('users').doc();
-            response.cookie("user_cookie", newUserRef.id, {maxAge: 600000000});
-        }
-        // if session cookie is not found add cookie and firestore doc
-        if(seshCookie === undefined) {
-            newSessionRef = firestore.collection('users')
-                .doc(newUserRef.id)
-                .collection('sessions')
-                .add(dataArray);
-            response.cookie("session_cookie", newSessionRef.id);
-        }
-        // bypass CORS error
-        response.set("Cache-Control", 'private');
-        response.set("Access-Control-Allow-Origin", "*");
-        response.set("Access-Control-Allow-Methods", "POST");
-        response.set("Access-Control-Allow-Headers", "Content-Type");   
-        response.set("Access-Control-Allow-Credentials", true);
+        if(permCookie && seshCookie) {
+            // bypass CORS error
+            response.set("Cache-Control", 'private');
+            response.set("Access-Control-Allow-Origin", "*");
+            response.set("Access-Control-Allow-Methods", "POST");
+            response.set("Access-Control-Allow-Headers", "Content-Type");   
+            response.set("Access-Control-Allow-Credentials", true);
 
-        // append new session to dataArray and to firestore
-        let sessionRef = firestore.collection('users')
-            .doc(newUserRef.id)
-            .collections('sessions')
-            .doc(newSessionRef.id)
-            .set({
-                dataArray: data
-            }, {merge: true} ); 
-        // get data in new session doc and send back in response body
-        let sessionRefData = sessionRef.get();
-        response.json({
-            data: sessionRefData.data()
-        });
+            let sessionRef = firestore.collection('users')
+                .doc(permCookie)
+                .collections('sessions')
+                .doc(seshCookie)
+                .set(data);
+
+            let sessionRefData = sessionRef.get();
+            response.json({
+                session_data: sessionRefData.data()
+            });
+        } 
     } catch (error) {
         response.status(500).send(error);
     }
+       
+    //     // append new session to dataArray and to firestore
+    //     let sessionRef = firestore.collection('users')
+    //         .doc(newUserRef.id)
+    //         .collections('sessions')
+    //         .doc(newSessionRef.id)
+    //         .set({
+    //             dataArray: data
+    //         }, {merge: true} ); 
+    //     // get data in new session doc and send back in response body
+    //     let sessionRefData = sessionRef.get();
+    //     response.json({
+    //         data: sessionRefData.data()
+    //     });
+    // } catch (error) {
+    //     response.status(500).send(error);
+    // }
 });
 
+// check if user has persistent/session cookie
+// append to existing session doc
+// or create new cookies and corresponding docs
 app.get('/cookie', async (request, response) => {
-    
     try {
+        // Bypass CORS
         response.set('Cache-Control', 'private')
         response.set("Access-Control-Allow-Origin", "*");
         response.set("Access-Control-Allow-Methods", "GET");
         response.set("Access-Control-Allow-Headers", "Content-Type");
         response.set("Access-Control-Allow-Credentials", true);
         response.set("Access-Control-Max-Age", "600000");
-        //const permCookie = request.cookies["permCookie"];
-        //const seshCookie = request.cookies["seshCookie"];
-        //const __session = request.cookies["__session"];
-        //response.cookie('__session', "124");
+        
         // check if user has persistent cookie or session cookie
         const permCookie = request.cookies["user_cookie"];
         const seshCookie = request.cookies["session_cookie"];
+
         // if persistent cookie is not found add cookie and firestore doc
-        if(permCookie === undefined) {
+        if(!permCookie) {
             const newUserRef = firestore.collection('users').doc();
             response.cookie("user_cookie", newUserRef.id, {maxAge: 600000000});
         }
         // if session cookie is not found add cookie and firestore doc
-        if(seshCookie === undefined) {
+        if(!seshCookie) {
             newSessionRef = firestore.collection('users')
                 .doc(newUserRef.id)
                 .collection('sessions')
