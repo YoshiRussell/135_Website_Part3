@@ -54,7 +54,7 @@ function gatherData(){
     xhttp.setRequestHeader("mode", "cors");
     xhttp.setRequestHeader("credentials", "include");
     xhttp.send();
-    xhttp.send(newJSON);
+    //xhttp.send(newJSON);
 
 }
 
