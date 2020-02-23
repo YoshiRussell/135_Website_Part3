@@ -41,7 +41,6 @@ function gatherData(){
     };
     
 
-
     fetch("https://us-central1-my-third-website.cloudfunctions.net/cookie/newsession" , {
         method: 'POST',
         mode: 'cors',
@@ -52,7 +51,7 @@ function gatherData(){
     }).then(myJson => {
         console.log(JSON.parse(myJson));
     });
-    
+}
 
 // There should be small 1x1 gif at the bottom of every page called check-image
 // function checkImages(){

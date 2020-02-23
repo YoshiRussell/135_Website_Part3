@@ -22,5 +22,10 @@
         "value" : "*"
       }]
     }]
+  },
+  "emulators": {
+    "functions": {
+      "port": "5002"
+    }
   }
 }
