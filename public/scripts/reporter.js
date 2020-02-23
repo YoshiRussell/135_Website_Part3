@@ -53,8 +53,13 @@ function gatherData(){
     //xhttp.withCredentials = true;
     xhttp.setRequestHeader("mode", "cors");
     xhttp.setRequestHeader("credentials", "include");
+    //xhttp.withCredentials = true;
     xhttp.send();
-    //xhttp.send(newJSON);
+    xhttp.onload = function() {
+        var jsonResponse = JSON.parse(xhttp.response);
+        document.cookie = jsonResponse.user;
+    }
+    //xhttp.send(JSON.stringify(newJSON));
 
 }
 

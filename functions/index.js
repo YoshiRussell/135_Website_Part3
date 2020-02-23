@@ -123,89 +123,42 @@ app.get('/cookie', (request, response) => {
     response.set("Access-Control-Allow-Methods", "GET");
     response.set("Access-Control-Allow-Headers", "Content-Type");
     response.set("Access-Control-Allow-Credentials", true);
-    //response.set("Access-Control-Max-Age", "600000");
         
     // check if user has persistent cookie or session cookie
     const permCookieId = request.cookies["user_cookie"];
     const seshCookieId = request.cookies["session_cookie"];
-    var responseBody = "";
-    response.cookie("does it work here?", "yo");
-    // if persistent cookie is not found add cookie and firestore doc
+
+    // if persistent cookie IS NOT found add cookie and firestore doc
     if(!permCookieId) {
         try {
-            // firestore.collection('users').add({user: true})
-            // .then(userDocRef => {
-            //     userDocRef.collection('sessions').add({made: "inside permCookieId", 
-            //                                            permId: userDocRef.id})
-            //     .then(sessionDocRef => {
-            //         response.cookie("user_cookie", userDocRef.id, {maxAge: 60000000, httpOnly: true});
-            //         response.cookie("session_cookie", sessionDocRef.id);
-            //         response.setHeader("testing", "test");
-            //         let bodystring = "userRef: " + userDocRef.id + ", sessionRef: " + sessionDocRef.id;
-            //         return response.send(bodystring);
-            //     }).catch(error => {
-            //         return response.send("ERROR HERE WHAAT");
-            //     });
-            // });
+            // [users] -> [{userDoc with random ID}]
             const userDoc = firestore.collection('users').doc();
             userDoc.set({path: "from userDoc"});
+
+            // [{userDoc with random ID}] -> [sessions] -> [{sessionDoc with random ID}]
             const seshDoc = userDoc.collection('sessions').doc();
             seshDoc.set({path: "from sesh"});
-            response.send({user: userDoc.id, sesh: seshDoc.id});
+            
+            // pass cookie string so client can parse and do "document.cookie = {cookie string we make}"
+            expireDate = new Date(Date.now() + 6000000);
+            userString = "user_cookie=" + userDoc.id + "; " + "Path=/; " + "Expires=" + expireDate;
+            sessionString = "session_cookie=" + seshDoc.id + "; " + "Path=/";
+            response.send({user: userString, sesh: sessionString});
         } catch (error) {
-            response.status(500).send("error in permCookie make");
+            response.status(500).send("error in making persistent/session cookie");
         }
     }
+    
+    // if persistent cookie IS found add just session cookie and firestore doc
     else if(!seshCookieId) {
         try {
-            firestore.collection('users').doc(permCookieId).set({made: "inside seshCookieId"})
-            .then(sessionDocRef => {
-                response.cookie("session_cookie", sessionDocRef.id);
-                responseBody += "sessionDocRef.id: " + sessionDocRef.id;
-            });
+            const seshDoc = firestore.collection('users').doc(permCookieId).collection('sessions').doc();
+            sessionString = "session_cookie=" + seshDoc.id + "; " + "Path=/";
+            response.send({sesh: sessionString});
         } catch (error) {
             response.status(500).send("error in seshCookie make");
         }
     }
-    try {
-        const testingDocId = 'testingDoc';
-        firestore.collection('users').doc(testingDocId).set({madeTest2: "fortnite"}, {merge: true});
-    } catch (error) {
-        response.status(500).send("error in testing");
-    }
-    response.send(responseBody);
-    
-    //     if(!__session) {
-    //         response.cookie('__session', '123');
-    //         response.send({sesh: __session});
-    //         return;
-    //     }
-    //     // if persistent cookie is not found add cookie and firestore doc
-    //     if(!permCookie) {
-    //         const newUserRef = firestore.collection('users').doc();
-    //         request.cookie("permCookie", 
-    //                         newUserRef.id, {
-    //                         maxAge: 600000000,
-    //                         httpOnly: true,
-    //                         secure: true
-    //                         });
-    //     }
-    //     // if session cookie is not found add cookie and firestore doc
-    //     if(!seshCookie) {
-    //         newSessionRef = firestore.collection('users')
-    //             .doc(newUserRef.id)
-    //             .collection('sessions')
-    //             .add(dataArray);
-    //         request.cookie("seshCookie", newSessionRef.id);
-    //     }
-    //     response.set("Access-Control-Allow-Origin", "https://my-third-website.firebaseapp.com/");
-    //     response.set("Access-Control-Allow-Methods", "GET");
-    //     response.set("Access-Control-Allow-Headers", "Content-Type");
-    //     response.set("Access-Control-Allow-Credentials", true);
-    //     response.set("Access-Control-Max-Age", "3600");
-    //     response.send({user_cookie: newUserRef.id, session_cookie: newSessionRef.id });
-    // } catch (error) {
-    //     response.status(500).send(error);
-    // }
+    response.send("Persistent and Session cookie already exist");
 });
 
