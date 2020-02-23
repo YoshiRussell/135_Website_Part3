@@ -44,7 +44,15 @@ app.post('/newsession', (request, response) => {
         // check if user/session cookies exist
         var userCookieID = request.cookies['user_cookie'];
         var sessionCookieID = request.cookies['session_cookie'];
-
+        
+        // grab data from request body
+        var data;
+        try {
+            data = request.body;
+        } catch (error) {
+            response.status(500).send({error: "error getting data"});
+        }
+        
         // if user_cookie doesnt exist make user/session cookie and corresponding docs
         if(userCookieID == null) {
             try {
@@ -64,7 +72,7 @@ app.post('/newsession', (request, response) => {
             try {
                 // [{userDoc with random ID}] -> [sessions] -> [{sessionDoc with random ID}]
                 let seshDocPath = firestore.collection('users').doc(userCookieID).collection('sessions').doc();
-                seshDocPath.set({path: "from sesh"});
+                seshDocPath.set(data);
                 sessionCookieID = seshDocPath.id;
                 response.cookie('session_cookie', sessionCookieID);
             } catch (error) {
@@ -72,46 +80,13 @@ app.post('/newsession', (request, response) => {
             }
         }
 
-        var data;
-        // parse request body JSON file
-        try {
-            // data = {
-            //     id: request.body.id, 
-            //     user_agent: request.body.user_agent,
-            //     user_lang: request.body.user_lang,
-            //     user_cookies: request.body.user_cookies,
-            //     user_js: request.body.user_js,
-            //     user_img: request.body.user_img,
-            //     user_css: request.body.user_css,
-            //     user_max_width: request.body.user_max_width,
-            //     user_max_height: request.body.user_max_height,
-            //     user_window_width: request.body.user_window_width,
-            //     user_window_height: request.body.user_window_height,
-            //     user_ect: request.body.user_ect,
-            //     performance_load_start: request.body.performance_load_start,
-            //     performance_load_end: request.body.performance_load_end,
-            //     performance_load_delta: request.body.performance_load_delta,
-            //     performance_request_start: request.body.performance_request_start,
-            //     performance_response_start: request.body.performance_response_start,
-            //     performance_response_end: request.body.performance_response_end,
-            //     performance_transfer_size: request.body.performance_transfer_size,
-            //     performance_encoded_body_size: request.body.performance_encoded_body_size,
-            //     dynamic_clicks: request.body.dynamic_clicks, 
-            //     dynamic_moves: request.body.dynamic_moves,
-            //     dynamic_keys: request.body.dynamic_keys,
-            //     dynamic_scroll: request.body.dynamic_scroll,  
-            //     dynamic_idle: request.body.dynamic_idle
-            // }
-            data = request.body;
-        } catch (error) {
-            response.status(500).send({error: "error getting data"});
-        }
+        
 
         // add data to its rightful spot in firestore
         try {
             let sessionRef = firestore.collection('users')
                 .doc(userCookieID)
-                .collections('sessions')
+                .collection('sessions')
                 .doc(sessionCookieID)
                 .set(data);
             let sessionRefData = sessionRef.get();
