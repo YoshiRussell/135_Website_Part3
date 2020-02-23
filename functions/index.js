@@ -46,7 +46,7 @@ app.post('/newsession', (request, response) => {
         var sessionCookieID = request.cookies['session_cookie'];
 
         // if user_cookie doesnt exist make user/session cookie and corresponding docs
-        if(userCookieID === null) {
+        if(userCookieID == null) {
             try {
                 // [users] -> [{userDoc with random ID}]
                 let userDocPath = firestore.collection('users').doc();
@@ -60,7 +60,7 @@ app.post('/newsession', (request, response) => {
         }
 
         // if only session cookie doesnt exit, find user doc and add session 
-        else if(sessionCookieID === null) {
+        else if(sessionCookieID == null) {
             try {
                 // [{userDoc with random ID}] -> [sessions] -> [{sessionDoc with random ID}]
                 let seshDocPath = firestore.collection('users').doc(userCookieID).collection('sessions').doc();
