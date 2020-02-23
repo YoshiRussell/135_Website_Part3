@@ -25,6 +25,7 @@ console.log("admin-firestore initialized");
 
 // add path used for receiving requests
 app.use(cors);
+app.options('/session', cors);
 app.use(bodyParser.json());
 app.use(cookieParser());
 exports.webApi = functions.https.onRequest(app);
