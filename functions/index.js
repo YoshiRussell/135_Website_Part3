@@ -129,7 +129,7 @@ app.get('/cookie', (request, response) => {
     const seshCookieId = request.cookies["session_cookie"];
 
     // if persistent cookie IS NOT found add cookie and firestore doc
-    if(!permCookieId) {
+    if(typeof permCookieId === 'undefined') {
         try {
             // [users] -> [{userDoc with random ID}]
             const userDoc = firestore.collection('users').doc();
@@ -150,7 +150,7 @@ app.get('/cookie', (request, response) => {
     }
     
     // if persistent cookie IS found add just session cookie and firestore doc
-    else if(!seshCookieId) {
+    else if(typeof seshCookieId === 'undefined') {
         try {
             const seshDoc = firestore.collection('users').doc(permCookieId).collection('sessions').doc();
             sessionString = "session_cookie=" + seshDoc.id + "; " + "Path=/";
