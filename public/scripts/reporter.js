@@ -40,7 +40,7 @@ function gatherData(){
             dynamic_idle:  JSON.stringify(idleEvents)
     };
     var xhttp = new XMLHttpRequest();
-    xhttp.open("POST", "https://cors-anywhere.herokuapp.com/https://us-central1-my-third-website.cloudfunctions.net/webApi/session");
+    xhttp.open("POST", "https://us-central1-my-third-website.cloudfunctions.net/webApi/session");
 
     xhttp.onreadystatechange = function() {
         if(xhttp.readyState === XMLHttpRequest.DONE && xhttp.status === 200) {
