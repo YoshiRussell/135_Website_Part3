@@ -64,7 +64,7 @@ function gatherData(){
 
     const response = fetch("https://us-central1-my-third-website.cloudfunctions.net/webApi/session", {
         method: 'POST',
-        mode: 'cors',
+        mode: 'no-cors',
         cache: 'no-cache',
         credentials: 'include',
         headers: {
