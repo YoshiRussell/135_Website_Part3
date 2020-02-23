@@ -29,7 +29,7 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 
 // MIDDLE-WARE TO SET COOKIES IF NEEDED
-app.use('/newsession', cors(request, response, next => {
+app.use('/newsession', (request, response, next) => {
     
     // set headers to satisfy CORS
     response.setHeader('Access-Control-Allow-Methods', 'POST');
@@ -73,7 +73,7 @@ app.use('/newsession', cors(request, response, next => {
     response.locals.userDocID = userCookieID;
     response.locals.sessionDocID = sessionCookieID;
     next();
-}));
+});
 
 
 // post tracker data in corresponding session
