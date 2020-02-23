@@ -2,7 +2,7 @@ var idleObj = setTimeout(timeoutHandler, 2000);
 var currentlyIdling = false;
 var idleStart, idleEnd, idleTime;
 var uniqueKey, fromPage;
-//var storeToCloud = setTimeout(gatherData, 30000);
+var storeToCloud = setTimeout(gatherData, 30000);
 function gatherData(){
     console.log("in gather data");
     var mainPerformanceObject = performance.getEntriesByName("load-time")[0];
@@ -39,43 +39,20 @@ function gatherData(){
             dynamic_scroll:  JSON.stringify(scrollEvents),
             dynamic_idle:  JSON.stringify(idleEvents)
     };
-    // var xhttp = new XMLHttpRequest();
-    // xhttp.open("POST", "https://us-central1-my-third-website.cloudfunctions.net/webApi/session");
+    
 
-    // xhttp.onreadystatechange = function() {
-    //     if(xhttp.readyState === XMLHttpRequest.DONE && xhttp.status === 200) {
-    //         console.log(xhttp.responseText);
-    //     }
-    // };
 
-    // // prepare and send to cloud functions
-    // xhttp.setRequestHeader("mode", "cors");
-    // //xhttp.setRequestHeader("credentials", "include");
-    // xhttp.withCredentials = true;
-    // xhttp.send(newJSON);
-
-    // // parse response body and assign cookies
-    // xhttp.onload = function() {
-    //     console.log(xhttp.response);
-    //     //let jsonResponse = JSON.parse(xhttp.response); 
-    //     //if ("user" in jsonResponse) { document.cookie = jsonResponse.user;}
-    //     //if ("sesh" in jsonResponse) { document.cookie = jsonResponse.sesh;}
-    // }
-
-    const response = fetch("https://us-central1-my-third-website.cloudfunctions.net/webApi/session", {
+    fetch("https://us-central1-my-third-website.cloudfunctions.net/cookie/sendData" , {
         method: 'POST',
-        mode: 'no-cors',
-        cache: 'no-cache',
-        credentials: 'include',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        redirect: 'follow',
-        referrerPolicy: 'no-referrer',
-        body: newJSON
+        mode: 'cors',
+        body: JSON.stringify(newJSON),
+        credentials: 'include'
+    }).then(response => {
+        return response.text();
+    }).then(myJson => {
+        console.log(JSON.parse(myJson));
     });
-    console.log(JSON.stringify(response));
-}
+    
 
 // There should be small 1x1 gif at the bottom of every page called check-image
 // function checkImages(){
