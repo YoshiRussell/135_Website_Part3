@@ -50,7 +50,7 @@ function gatherData(){
 
     // prepare and send to cloud functions
     xhttp.setRequestHeader("mode", "cors");
-    xhttp.setRequestHeader("credentials", "include");
+    //xhttp.setRequestHeader("credentials", "include");
     xhttp.withCredentials = true;
     xhttp.send(newJSON);
 
