@@ -33,11 +33,11 @@ exports.webApi = functions.https.onRequest(app);
 // path that triggers this 
 //   = https://us-central1-(...).cloudfunctions.net/webApi/api/v1/session
 app.post('/session', (request, response) => {
-    response.header('Cache-Control', 'private');
-    response.header("Access-Control-Allow-Origin", "https://quirky-jennings-bbbbeb.netlify.com/");
-    response.header("Access-Control-Allow-Methods", "POST, GET, OPTIONS, UPDATE, PUT");
-    response.header("Access-Control-Allow-Headers", "X-Requested-With, X-HTTP-Method-Override, Content-Type");
-    response.header("Access-Control-Allow-Credentials", true);
+    response.setHeader('Cache-Control', 'private');
+    response.setHeader("Access-Control-Allow-Origin", "*");
+    response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, UPDATE, PUT");
+    response.setHeader("Access-Control-Allow-Headers", "X-Requested-With, X-HTTP-Method-Override, Content-Type");
+    response.setHeader("Access-Control-Allow-Credentials", "true");
        
     // check if user has persistent cookie or session cookie
     const permCookieId = request.cookies['user_cookie'];
