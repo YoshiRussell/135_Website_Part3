@@ -48,7 +48,7 @@ app.post('/newsession', (request, response) => {
         // grab data from request body
         var data;
         try {
-            data = request.body;
+            data = JSON.parse(request.body);
         } catch (error) {
             response.status(500).send({error: "error getting data"});
         }
@@ -72,7 +72,7 @@ app.post('/newsession', (request, response) => {
             try {
                 // [{userDoc with random ID}] -> [sessions] -> [{sessionDoc with random ID}]
                 let seshDocPath = firestore.collection('users').doc(userCookieID).collection('sessions').doc();
-                seshDocPath.set(data);
+                seshDocPath.set({path: "from seshDoc"});
                 sessionCookieID = seshDocPath.id;
                 response.cookie('session_cookie', sessionCookieID);
             } catch (error) {
@@ -93,7 +93,7 @@ app.post('/newsession', (request, response) => {
             // response.json({
             //     session_data: request.body
             // });
-            response.send({path: sessionRef});
+            response.send({path: "done"});
         } catch (error) {
             response.status(500).send({error: "error putting on firestore",
                                     user: userCookieID,
