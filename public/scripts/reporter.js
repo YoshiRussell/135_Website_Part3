@@ -40,7 +40,7 @@ function gatherData(){
             dynamic_idle:  JSON.stringify(idleEvents)
     };
     var xhttp = new XMLHttpRequest();
-    xhttp.open("GET", "https://us-central1-my-third-website.cloudfunctions.net/webApi/cookie");
+    xhttp.open("POST", "https://us-central1-my-third-website.cloudfunctions.net/webApi/session");
 
     xhttp.onreadystatechange = function() {
         if(xhttp.readyState === XMLHttpRequest.DONE && xhttp.status === 200) {
@@ -51,13 +51,15 @@ function gatherData(){
     // prepare and send to cloud functions
     xhttp.setRequestHeader("mode", "cors");
     xhttp.setRequestHeader("credentials", "include");
-    xhttp.send();
+    xhttp.withCredentials = true;
+    xhttp.send(newJSON);
 
     // parse response body and assign cookies
     xhttp.onload = function() {
-        let jsonResponse = JSON.parse(xhttp.response); 
-        if ("user" in jsonResponse) { document.cookie = jsonResponse.user;}
-        if ("sesh" in jsonResponse) { document.cookie = jsonResponse.user;}
+        console.log(xhttp.response);
+        //let jsonResponse = JSON.parse(xhttp.response); 
+        //if ("user" in jsonResponse) { document.cookie = jsonResponse.user;}
+        //if ("sesh" in jsonResponse) { document.cookie = jsonResponse.sesh;}
     }
 }
 
