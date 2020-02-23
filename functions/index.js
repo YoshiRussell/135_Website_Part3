@@ -88,11 +88,12 @@ app.post('/newsession', (request, response) => {
                 .collection('sessions')
                 .doc(sessionCookieID)
                 .set({umm: "hello?"});
-            let sessionRefData = sessionRef.get();
+            //let sessionRefData = sessionRef.get();
             // return this through the response body
-            response.json({
-                session_data: sessionRefData.data()
-            });
+            // response.json({
+            //     session_data: request.body
+            // });
+            response.send({path: sessionRef});
         } catch (error) {
             response.status(500).send({error: "error putting on firestore",
                                     user: userCookieID,
