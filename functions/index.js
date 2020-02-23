@@ -125,11 +125,11 @@ app.get('/cookie', (request, response) => {
     response.set("Access-Control-Allow-Credentials", true);
         
     // check if user has persistent cookie or session cookie
-    const permCookieId = request.cookies["user_cookie"];
-    const seshCookieId = request.cookies["session_cookie"];
+    const permCookieId = request.cookies.user_cookie;
+    const seshCookieId = request.cookies.session_cookie;
 
     // if persistent cookie IS NOT found add cookie and firestore doc
-    if(typeof permCookieId === 'undefined') {
+    if(permCookieId == null) {
         try {
             // [users] -> [{userDoc with random ID}]
             const userDoc = firestore.collection('users').doc();
@@ -140,9 +140,10 @@ app.get('/cookie', (request, response) => {
             seshDoc.set({path: "from sesh"});
             
             // pass cookie string so client can parse and do "document.cookie = {cookie string we make}"
-            expireDate = new Date(Date.now() + 6000000);
-            userString = "user_cookie=" + userDoc.id + "; " + "Path=/; " + "Expires=" + expireDate;
-            sessionString = "session_cookie=" + seshDoc.id + "; " + "Path=/";
+            userExpireDate = new Date(Date.now() + 600000000); // 1 week
+            userString = "user_cookie=" + userDoc.id + "; " + "Path=/; " + "Expires=" + userExpireDate;
+            seshExpireDate = new Date(Date.now() + 900000); // 15 minutes
+            sessionString = "session_cookie=" + seshDoc.id + "; " + "Path=/" + "Expires=" + seshExpireDate;
             response.send({user: userString, sesh: sessionString, from: "noPermCookie"});
         } catch (error) {
             response.status(500).send("error in making persistent/session cookie");
@@ -150,7 +151,7 @@ app.get('/cookie', (request, response) => {
     }
     
     // if persistent cookie IS found add just session cookie and firestore doc
-    else if(typeof seshCookieId === 'undefined') {
+    else if(seshCookieId == null) {
         try {
             const seshDoc = firestore.collection('users').doc(permCookieId).collection('sessions').doc();
             sessionString = "session_cookie=" + seshDoc.id + "; " + "Path=/";
@@ -159,6 +160,6 @@ app.get('/cookie', (request, response) => {
             response.status(500).send("error in seshCookie make");
         }
     }
-    response.send("Persistent and Session cookie already exist");
+    response.send({userExist: request.cookies});
 });
 
