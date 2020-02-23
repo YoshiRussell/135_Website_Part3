@@ -80,6 +80,7 @@ app.post('/session', (request, response) => {
             response.status(500).send({error: "error in seshCookie make"});
         }
     }
+    response.send({what: "fart"});
     //response.send({userExist: request.cookies});
     // try {
     //     const data = {
