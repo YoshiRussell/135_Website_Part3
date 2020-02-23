@@ -87,7 +87,7 @@ app.post('/newsession', (request, response) => {
                 .doc(userCookieID)
                 .collection('sessions')
                 .doc(sessionCookieID)
-                .set({umm: "hello?"});
+                .set(data);
             //let sessionRefData = sessionRef.get();
             // return this through the response body
             // response.json({
