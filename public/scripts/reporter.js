@@ -40,9 +40,6 @@ function gatherData(){
             dynamic_idle:  JSON.stringify(idleEvents)
     };
     var xhttp = new XMLHttpRequest();
-    //xhttp.open("POST", "https://us-central1-my-third-website.cloudfunctions.net/webApi/api/v1/session", true);
-    //xhttp.send(newJSON);
-    //xhttp.open("GET", "https://us-central1-my-third-website.cloudfunctions.net/webApi/cookie", true);
     xhttp.open("GET", "https://us-central1-my-third-website.cloudfunctions.net/webApi/cookie");
 
     xhttp.onreadystatechange = function() {
@@ -50,17 +47,18 @@ function gatherData(){
             console.log(xhttp.responseText);
         }
     };
-    //xhttp.withCredentials = true;
+
+    // prepare and send to cloud functions
     xhttp.setRequestHeader("mode", "cors");
     xhttp.setRequestHeader("credentials", "include");
-    //xhttp.withCredentials = true;
     xhttp.send();
-    xhttp.onload = function() {
-        var jsonResponse = JSON.parse(xhttp.response);
-        document.cookie = jsonResponse.user;
-    }
-    //xhttp.send(JSON.stringify(newJSON));
 
+    // parse response body and assign cookies
+    xhttp.onload = function() {
+        let jsonResponse = JSON.parse(xhttp.response); 
+        if ("user" in jsonResponse) { document.cookie = jsonResponse.user;}
+        if ("sesh" in jsonResponse) { document.cookie = jsonResponse.user;}
+    }
 }
 
 // There should be small 1x1 gif at the bottom of every page called check-image

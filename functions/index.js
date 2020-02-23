@@ -143,7 +143,7 @@ app.get('/cookie', (request, response) => {
             expireDate = new Date(Date.now() + 6000000);
             userString = "user_cookie=" + userDoc.id + "; " + "Path=/; " + "Expires=" + expireDate;
             sessionString = "session_cookie=" + seshDoc.id + "; " + "Path=/";
-            response.send({user: userString, sesh: sessionString});
+            response.send({user: userString, sesh: sessionString, from: "noPermCookie"});
         } catch (error) {
             response.status(500).send("error in making persistent/session cookie");
         }
@@ -154,7 +154,7 @@ app.get('/cookie', (request, response) => {
         try {
             const seshDoc = firestore.collection('users').doc(permCookieId).collection('sessions').doc();
             sessionString = "session_cookie=" + seshDoc.id + "; " + "Path=/";
-            response.send({sesh: sessionString});
+            response.send({sesh: sessionString, from: "noSeshCookie"});
         } catch (error) {
             response.status(500).send("error in seshCookie make");
         }
