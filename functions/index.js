@@ -81,14 +81,13 @@ app.post('/newsession', (request, response) => {
         }
 
         
-
         // add data to its rightful spot in firestore
         try {
             let sessionRef = firestore.collection('users')
                 .doc(userCookieID)
                 .collection('sessions')
                 .doc(sessionCookieID)
-                .set(data);
+                .set({umm: "hello?"});
             let sessionRefData = sessionRef.get();
             // return this through the response body
             response.json({
@@ -96,8 +95,8 @@ app.post('/newsession', (request, response) => {
             });
         } catch (error) {
             response.status(500).send({error: "error putting on firestore",
-                                    user: response.locals.userDocID,
-                                    session: response.locals.sessionDocID});
+                                    user: userCookieID,
+                                    session: sessionCookieID});
         }
             // try {  
             //     // append new session to dataArray and to firestore
