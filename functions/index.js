@@ -60,7 +60,7 @@ app.post('/newsession', (request, response) => {
         }
 
         // if only session cookie doesnt exit, find user doc and add session 
-        else if(sessionCookieID == null) {
+        if(sessionCookieID == null) {
             try {
                 // [{userDoc with random ID}] -> [sessions] -> [{sessionDoc with random ID}]
                 let seshDocPath = firestore.collection('users').doc(userCookieID).collection('sessions').doc();
@@ -103,7 +103,6 @@ app.post('/newsession', (request, response) => {
             //     dynamic_idle: request.body.dynamic_idle
             // }
             data = request.body;
-            response.send({jsonData: data, userCookie: userCookieID, sessionCookie: sessionCookieID});
         } catch (error) {
             response.status(500).send({error: "error getting data"});
         }
@@ -111,9 +110,9 @@ app.post('/newsession', (request, response) => {
         // add data to its rightful spot in firestore
         try {
             let sessionRef = firestore.collection('users')
-                .doc(response.locals.userDocID)
+                .doc(userCookieID)
                 .collections('sessions')
-                .doc(response.locals.sessionDocID)
+                .doc(sessionCookieID)
                 .set(data);
             let sessionRefData = sessionRef.get();
             // return this through the response body
