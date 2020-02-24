@@ -88,7 +88,7 @@ app.post('/newsession', (request, response) => {
                 .collection('sessions')
                 .doc(sessionCookieID)
                 .set({
-                    dataArray: data
+                    dataArray: [data]
                 }, {merge: true} );
             //let sessionRefData = sessionRef.get();
             // return this through the response body
