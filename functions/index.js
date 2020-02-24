@@ -48,7 +48,7 @@ app.post('/newsession', (request, response) => {
         // grab data from request body
         var data;
         try {
-            data = JSON.parse(request.body);
+            data = request.body;
         } catch (error) {
             response.status(500).send({error: "error getting data"});
         }
