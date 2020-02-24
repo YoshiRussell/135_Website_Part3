@@ -87,10 +87,15 @@ app.post('/newsession', (request, response) => {
             let sessionRef = firestore.collection('users')
                 .doc(userCookieID)
                 .collection('sessions')
-                .doc(sessionCookieID)
-                .update({
-                    dataArray: firestore.FieldValue.arrayUnion(data)
+                .doc(sessionCookieID);
+            
+            firestore.runTransaction(transaction => {
+                return transaction.get(sessionRef).then(snapshot => {
+                    const appendArray = snapshot.get(dataArray);
+                    appendArray.push(data);
+                    transaction.update(sessionRef, dataArray, appendArray);
                 });
+            });
             //let sessionRefData = sessionRef.get();
             // return this through the response body
             // response.json({
