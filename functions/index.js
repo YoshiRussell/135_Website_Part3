@@ -55,21 +55,18 @@ app.post('/newsession', (request, response) => {
         
         // if user_cookie doesnt exist make user/session cookie and corresponding docs
         if(userCookieID == null) {
-            try {
+    
                 // [users] -> [{userDoc with random ID}]
                 let userDocPath = firestore.collection('users').doc();
                 userDocPath.set({path: "from userDoc"});
                 userCookieID = userDocPath.id;
                 // set user cookie
                 response.cookie('user_cookie', userCookieID, {maxAge: 600000000, httpOnly: true});
-            } catch (error) {
-                response.status(500).send({error: "error creating user cookie"});
-            }
         }
 
         // if only session cookie doesnt exit, find user doc and add session 
         if(sessionCookieID == null) {
-            try {
+           
                 // [{userDoc with random ID}] -> [sessions] -> [{sessionDoc with random ID}]
                 let seshDocPath = firestore.collection('users').doc(userCookieID).collection('sessions').doc();
                 let dataArray = [];
@@ -77,14 +74,11 @@ app.post('/newsession', (request, response) => {
                 seshDocPath.collection('entries');
                 sessionCookieID = seshDocPath.id;
                 response.cookie('session_cookie', sessionCookieID);
-            } catch (error) {
-                response.status(500).send({error: "error creating session cookie"});
-            }
         }
 
         
         // add data to its rightful spot in firestore
-        try {
+       
             let sessionRef = firestore.collection('users')
                 .doc(userCookieID)
                 .collection('sessions')
@@ -96,12 +90,12 @@ app.post('/newsession', (request, response) => {
             // response.json({
             //     session_data: request.body
             // });
-            response.send({path: "done"});
-        } catch (error) {
-            response.status(500).send({error: "error putting on firestore",
-                                    user: userCookieID,
-                                    session: sessionCookieID});
-        }
+            try {
+                response.send({path: "done"});
+            } catch (error) {
+                response.status(500).send(JSON.stringify({iserror: error, user: userCookieID, sesh: sessionCookieID}));
+            }
+       
             // try {  
             //     // append new session to dataArray and to firestore
             //     let sessionRef = firestore.collection('users')
