@@ -74,6 +74,7 @@ app.post('/newsession', (request, response) => {
                 let seshDocPath = firestore.collection('users').doc(userCookieID).collection('sessions').doc();
                 let dataArray = [];
                 seshDocPath.set(dataArray);
+                seshDocPath.collection('entries');
                 sessionCookieID = seshDocPath.id;
                 response.cookie('session_cookie', sessionCookieID);
             } catch (error) {
@@ -87,13 +88,8 @@ app.post('/newsession', (request, response) => {
             let sessionRef = firestore.collection('users')
                 .doc(userCookieID)
                 .collection('sessions')
-                .doc(sessionCookieID);
-            
-            sessionRef.get().then(snapshot => {
-                var dataArray = snapshot.data();
-                dataArray.push(data);
-                sessionRef.set(dataArray);
-            });
+                .doc(sessionCookieID)
+                .collection('entries').add(data);
             
             //let sessionRefData = sessionRef.get();
             // return this through the response body
