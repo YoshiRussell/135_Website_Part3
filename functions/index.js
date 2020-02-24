@@ -48,7 +48,7 @@ app.post('/newsession', (request, response) => {
         // grab data from request body
         var data;
         try {
-            data = request.body;
+            data = JSON.parse(request.body);
         } catch (error) {
             response.status(500).send({error: "error getting data"});
         }
@@ -83,7 +83,7 @@ app.post('/newsession', (request, response) => {
                 .doc(userCookieID)
                 .collection('sessions')
                 .doc(sessionCookieID)
-                .collection('entries').add(data);
+                .collection('entries').doc().set(data);
             
             //let sessionRefData = sessionRef.get();
             // return this through the response body
