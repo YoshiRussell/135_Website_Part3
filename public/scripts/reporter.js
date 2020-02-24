@@ -1,4 +1,5 @@
 var idleObj = setTimeout(timeoutHandler, 2000); 
+var storeJSON = setTimeout(gatherData, 20000);
 var currentlyIdling = false;
 var idleStart, idleEnd, idleTime;
 var uniqueKey, fromPage;
