@@ -66,55 +66,29 @@ app.post('/newsession', (request, response) => {
 
         // if only session cookie doesnt exit, find user doc and add session 
         if(sessionCookieID == null) {
-           
-                // [{userDoc with random ID}] -> [sessions] -> [{sessionDoc with random ID}]
-                let seshDocPath = firestore.collection('users').doc(userCookieID).collection('sessions').doc();
-                let dataArray = [];
-                seshDocPath.set(dataArray);
-                seshDocPath.collection('entries');
-                sessionCookieID = seshDocPath.id;
-                response.cookie('session_cookie', sessionCookieID);
+
+            // [{userDoc with random ID}] -> [sessions] -> [{sessionDoc with random ID}]
+            let seshDocPath = firestore.collection('users').doc(userCookieID).collection('sessions').doc();
+            let dataArray = [];
+            seshDocPath.set(dataArray);
+            seshDocPath.collection('entries');
+            sessionCookieID = seshDocPath.id;
+            response.cookie('session_cookie', sessionCookieID);
         }
 
         
-        // add data to its rightful spot in firestore
-       
-            let sessionRef = firestore.collection('users')
-                .doc(userCookieID)
-                .collection('sessions')
-                .doc(sessionCookieID)
-                .collection('entries').doc().set(data);
+        // add data to its rightful spot in firestore  
+        firestore.collection('users')
+            .doc(userCookieID)
+            .collection('sessions')
+            .doc(sessionCookieID)
+            .collection('entries').doc().set(data);
             
-            //let sessionRefData = sessionRef.get();
-            // return this through the response body
-            // response.json({
-            //     session_data: request.body
-            // });
-            try {
-                response.send({path: "done"});
-            } catch (error) {
-                response.status(500).send(JSON.stringify({iserror: error, user: userCookieID, sesh: sessionCookieID}));
-            }
-       
-            // try {  
-            //     // append new session to dataArray and to firestore
-            //     let sessionRef = firestore.collection('users')
-            //         .doc(newUserRef.id)
-            //         .collections('sessions')
-            //         .doc(newSessionRef.id)
-            //         .set({
-            //             dataArray: data
-            //         }, {merge: true} ); 
-            //     // get data in new session doc and send back in response body
-            //     let sessionRefData = sessionRef.get();
-            //     response.json({
-            //         data: sessionRefData.data()
-            //     });
-            // } catch (error) {
-            //     response.status(500).send(error);
-            // }
-        //});
-    
+        try {
+            response.send({path: "done"});
+        } catch (error) {
+            response.status(500).send(JSON.stringify({iserror: error, user: userCookieID, sesh: sessionCookieID}));
+        }
     });
 });
 
