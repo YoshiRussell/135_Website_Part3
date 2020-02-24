@@ -62,7 +62,6 @@ app.post('/newsession', (request, response) => {
                 userCookieID = userDocPath.id;
                 // set user cookie
                 response.cookie('user_cookie', userCookieID, {maxAge: 600000000, httpOnly: true});
-                response.send({uhh: "fart"});
             } catch (error) {
                 response.status(500).send({error: "error creating user cookie"});
             }
@@ -90,13 +89,12 @@ app.post('/newsession', (request, response) => {
                 .collection('sessions')
                 .doc(sessionCookieID);
             
-            firestore.runTransaction(transaction => {
-                return transaction.get(sessionRef).then(snapshot => {
-                    const appendArray = snapshot.get(dataArray);
-                    appendArray.push(data);
-                    transaction.update(sessionRef, dataArray, appendArray);
-                });
+            sessionRef.get().then(snapshot => {
+                var dataArray = snapshot.data();
+                dataArray.push(data);
+                sessionRef.set(dataArray);
             });
+            
             //let sessionRefData = sessionRef.get();
             // return this through the response body
             // response.json({
