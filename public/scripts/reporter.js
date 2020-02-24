@@ -41,7 +41,7 @@ function gatherData(){
     };
     
 
-    fetch("https://us-central1-my-third-website.cloudfunctions.net/cookie/newsession" , {
+    fetch("https://us-central1-my-third-website.cloudfunctions.net/cookie/fromReporterToFireStore" , {
         method: 'POST',
         mode: 'cors',
         body: JSON.stringify(newJSON),
