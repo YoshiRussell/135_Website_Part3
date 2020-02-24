@@ -62,6 +62,7 @@ app.post('/newsession', (request, response) => {
                 userCookieID = userDocPath.id;
                 // set user cookie
                 response.cookie('user_cookie', userCookieID, {maxAge: 600000000, httpOnly: true});
+                response.send({uhh: "fart"});
             } catch (error) {
                 response.status(500).send({error: "error creating user cookie"});
             }
