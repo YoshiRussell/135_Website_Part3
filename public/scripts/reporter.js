@@ -2,7 +2,7 @@ var idleObj = setTimeout(timeoutHandler, 2000);
 var currentlyIdling = false;
 var idleStart, idleEnd, idleTime;
 var uniqueKey, fromPage;
-var storeToCloud = setTimeout(gatherData, 30000);
+
 function gatherData(){
     console.log("in gather data");
     var mainPerformanceObject = performance.getEntriesByName("load-time")[0];
@@ -51,6 +51,8 @@ function gatherData(){
     }).then(myJson => {
         console.log(JSON.parse(myJson));
     });
+
+    resetIdle();
 }
 
 // There should be small 1x1 gif at the bottom of every page called check-image
