@@ -72,7 +72,8 @@ app.post('/newsession', (request, response) => {
             try {
                 // [{userDoc with random ID}] -> [sessions] -> [{sessionDoc with random ID}]
                 let seshDocPath = firestore.collection('users').doc(userCookieID).collection('sessions').doc();
-                seshDocPath.set({path: "from seshDoc"});
+                let dataArray = [];
+                seshDocPath.set(dataArray);
                 sessionCookieID = seshDocPath.id;
                 response.cookie('session_cookie', sessionCookieID);
             } catch (error) {
@@ -87,9 +88,9 @@ app.post('/newsession', (request, response) => {
                 .doc(userCookieID)
                 .collection('sessions')
                 .doc(sessionCookieID)
-                .set({
-                    dataArray: [data]
-                }, {merge: true} );
+                .update({
+                    dataArray: firestore.FieldValue.arrayUnion(data)
+                });
             //let sessionRefData = sessionRef.get();
             // return this through the response body
             // response.json({
